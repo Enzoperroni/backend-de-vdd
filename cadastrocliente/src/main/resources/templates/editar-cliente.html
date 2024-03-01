@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Editar Cliente</h2>
-    <form action ="#" th:action="@{/cliente/atualizar/{id}(id=${cliente.id})" method="post">
+    <form action ="#" th:object="${cliente}" th:action="@{/cliente/atualizar/{id}(id=${cliente.id})}" method="post">
         <label>Nome</label>
         <input type name="text" th:field="*{nome}" id ="nome"/>
         <label>Email</label>
@@ -16,7 +16,7 @@
         <label>Data de Nascimento</label>
         <input type name="text" th:field="*{dataNascimento}" id ="dataNascimento"/>
 
-        <input type="submit" value="Atualizar Cliente"/>
+        <input type="submit" value="Editar Cliente"/>
     </form>
 </body>
 </html>

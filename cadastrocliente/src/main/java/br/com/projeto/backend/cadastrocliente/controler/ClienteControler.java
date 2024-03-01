@@ -51,11 +51,12 @@ public class ClienteControler {
         return "redirect:/cliente/listar";
     }
     @GetMapping("/editar/{id}")
-    public String editarCliente(@PathVariable("id")int id,Model model){
+    public String editar(@PathVariable("id")int id, Model model){
         Cliente clienteParaEditar = null;
         for (Cliente item : repositorio){
             if (item.getId()==id){
                 clienteParaEditar = item;
+                break;
             }
         }
         model.addAttribute("cliente",clienteParaEditar);
@@ -63,17 +64,19 @@ public class ClienteControler {
 
     }
     @PostMapping("/atualizar/{id}")
-    public String atualizarCliente(@PathVariable("id")int id, Cliente clienteAtualizado){
+    public String atualizar(@PathVariable("id")int id, Cliente clienteAtualizado){
         Cliente clienteExistente = null;
-        for (Cliente item : repositorio){
-            if (item.getId()==id){
+        for (Cliente item : repositorio) {
+            if (item.getId() == id) {
                 clienteExistente = item;
+                break;
             }
-            clienteExistente.setNome(clienteAtualizado.getNome());
-            clienteExistente.setEmail(clienteAtualizado.getEmail());
-            clienteExistente.setCpf(clienteAtualizado.getCpf());
-            clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
         }
+        clienteExistente.setNome(clienteAtualizado.getNome());
+        clienteExistente.setEmail(clienteAtualizado.getEmail());
+        clienteExistente.setCpf(clienteAtualizado.getCpf());
+        clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
+
         return "redirect:/cliente/listar";
     }
 }

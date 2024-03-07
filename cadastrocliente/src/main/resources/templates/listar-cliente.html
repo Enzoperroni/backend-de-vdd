@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{header::header}"></head>
 <body>
-<a href="/cliente/adicionar">Criar novo cliente</a>
-<table>
+
+<table class="table table-striped">
     <tr>
         <th>ID</th>
         <th>Nome</th>
@@ -14,6 +11,7 @@
         <th>Cpf</th>
         <th>Data de Nascimento</th>
         <th>Ações</th>
+
     </tr>
     <tr th:each="cliente: ${listaCliente}">
         <td th:text="${cliente.id}"></td>
@@ -22,10 +20,14 @@
         <td th:text="${cliente.cpf}"></td>
         <td th:text="${cliente.dataNascimento}"></td>
         <td>
-            <a th:href="@{/cliente/excluir/{id}(id=${cliente.id})}">Excluir</a>
-            <a th:href="@{/cliente/editar/{id}(id=${cliente.id})}">Editar</a>
+            <a class="btn btn-link" th:href="@{/cliente/excluir/{id}(id=${cliente.id})}">Excluir</a>
+            <a class="btn btn-link" th:href="@{/cliente/editar/{id}(id=${cliente.id})}">Editar</a>
         </td>
-
+    </tr>
+    <tr>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-secondary" href="/cliente/adicionar">Criar novo cliente</a>
+        </div>
     </tr>
 </table>
 

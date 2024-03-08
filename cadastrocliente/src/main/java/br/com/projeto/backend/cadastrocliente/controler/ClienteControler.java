@@ -1,7 +1,10 @@
 package br.com.projeto.backend.cadastrocliente.controler;
 
 import br.com.projeto.backend.cadastrocliente.model.Cliente;
+import br.com.projeto.backend.cadastrocliente.repository.ClienteRepository;
+import jakarta.persistence.Id;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,12 +19,13 @@ import java.util.ArrayList;
 @RequestMapping("/cliente")
 public class ClienteControler {
 
-    private static ArrayList<Cliente> repositorio = new ArrayList<>();
+    @Autowired
+    private ClienteRepository repositorio;
 
     @GetMapping("/listar")
     public String listarCliente(Model model){
 
-        model.addAttribute("listaCliente",repositorio);
+        model.addAttribute("listaCliente",repositorio.findAll());
 
         return "listar-cliente";
     }
@@ -37,52 +41,34 @@ public class ClienteControler {
             return "salvar";
         }
 
-        int id =1;
-        if (repositorio.size()>0){
-            Cliente ultimo = repositorio.get(repositorio.size() -1);
-            id = ultimo.getId() +1;
-        }
-        cliente.setId(id);
-        repositorio.add(cliente);
+        repositorio.save(cliente);
         return "redirect:/cliente/listar";
     }
     @GetMapping("/excluir/{id}")
     public String excluir(@PathVariable("id")int id){
-        Cliente clienteASerExcluir = null;
-        for (Cliente item : repositorio){
-            if(item.getId()==id){
-                clienteASerExcluir = item;
-            }
-        }
-        repositorio.remove(clienteASerExcluir);
+        Cliente clienteASerExcluir = repositorio.getById(id);
+
+        repositorio.delete(clienteASerExcluir);
         return "redirect:/cliente/listar";
     }
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable("id")int id, Model model){
-        Cliente clienteParaEditar = null;
-        for (Cliente item : repositorio){
-            if (item.getId()==id){
-                clienteParaEditar = item;
-                break;
-            }
-        }
+        Cliente clienteParaEditar = repositorio.getById(id);
+
         model.addAttribute("cliente",clienteParaEditar);
         return "editar-cliente";
 
     }
     @PostMapping("/atualizar/{id}")
     public String atualizar(@PathVariable("id")int id, Cliente clienteAtualizado){
-        Cliente clienteExistente = null;
-        for (Cliente item : repositorio) {
-            if (item.getId() == id) {
-                clienteExistente = item;
-                break;
-            }
-        }
+        Cliente clienteExistente = repositorio.getById(id);
+
         clienteExistente.setNome(clienteAtualizado.getNome());
         clienteExistente.setEmail(clienteAtualizado.getEmail());
         clienteExistente.setCpf(clienteAtualizado.getCpf());
         clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
+
+        repositorio.save(clienteExistente);
 
         return "redirect:/cliente/listar";
     }
